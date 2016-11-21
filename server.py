@@ -1,9 +1,13 @@
 # ----- Imports ----- #
 
-from flask import Flask, render_template
+from urllib.parse import urlencode
+from flask import Flask, render_template, redirect
+import paypal
 
 
 # ----- Setup ----- #
+
+PAYPAL_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token={}'
 
 app = Flask(__name__)
 
@@ -16,9 +20,12 @@ def checkout():
 	return render_template('checkout.html')
 
 @app.route('/paypal')
-def paypal():
+def auth_payment():
 
-	return 'The paypal page.'
+	token = paypal.setup_payment()
+	redirect_url = PAYPAL_URL.format(token)
+
+	return redirect(redirect_url)
 
 
 # ----- Run ----- #

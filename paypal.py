@@ -42,4 +42,4 @@ def setup_payment():
 	r = requests.post(ENPOINT_URL, data=build_data(req_data))
 	response_data = parse_qs(r.text)
 
-	return response_data['TOKEN']
+	return response_data['TOKEN'][0]
