@@ -1,6 +1,6 @@
 # ----- Imports ----- #
 
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlencode
 import requests
 
 
@@ -25,7 +25,7 @@ def build_data(data):
 	return {**REQUEST_DEFAULTS, **data}
 
 
-def setup_payment():
+def setup_payment(return_url, cancel_url):
 
 	"""Sets up the payment authorization, returns the token."""
 
@@ -34,12 +34,27 @@ def setup_payment():
 		'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
 		'PAYMENTREQUEST_0_AMT': '4.20',
 		'PAYMENTREQUEST_0_CURRENCYCODE': 'GBP',
-		'RETURNURL': 'http://localhost:9000/',
-		'CANCELURL': 'http://localhost:9000/',
+		'RETURNURL': return_url,
+		'CANCELURL': cancel_url,
 		'BILLINGTYPE': 'MerchantInitiatedBilling'
 	}
 
 	r = requests.post(ENPOINT_URL, data=build_data(req_data))
 	response_data = parse_qs(r.text)
 
-	return response_data['TOKEN'][0]
+	return urlencode(response_data['TOKEN'][0])
+
+
+def create_agreement(token):
+
+	"""Creates a billing agreement and returns the BAID."""
+
+	req_data = {
+		'METHOD': 'CreateBillingAgreement',
+		'TOKEN': token
+	}
+
+	r = requests.post(ENPOINT_URL, data=build_data(req_data))
+	response_data = parse_qs(r.text)
+
+	return response_data['BILLINGAGREEMENTID'][0]
