@@ -7,8 +7,6 @@ import paypal
 
 # ----- Setup ----- #
 
-PAYPAL_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token={}'
-
 app = Flask(__name__)
 
 
@@ -28,18 +26,16 @@ def auth_payment():
 		cancel_url='http://localhost:5000/cancel'
 	)
 
-	# redirect_url = PAYPAL_URL.format(token)
-
-	return json.dumps({'token': token})
+	return json.jsonify({'token': token})
 
 
-@app.route('/create_payment')
+@app.route('/create_payment', methods=['POST'])
 def create_payment():
 
-	token = request.args.get('token')
+	token = request.get_json()['token']
 	baid = paypal.create_agreement(token)
 
-	return render_template('baid.html', baid=baid)
+	return json.jsonify({'baid': baid})
 
 
 @app.route('/cancel')
