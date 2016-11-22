@@ -2,6 +2,7 @@
 
 from urllib.parse import parse_qs
 import requests
+import os
 
 
 # ----- Setup ----- #
@@ -9,9 +10,9 @@ import requests
 ENPOINT_URL = 'https://api-3t.sandbox.paypal.com/nvp'
 
 REQUEST_DEFAULTS = {
-	'USER': '***REMOVED***',
-	'PWD': '***REMOVED***',
-	'SIGNATURE': '***REMOVED***',
+	'USER': os.environ['PAYPAL_SPIKE_USER'],
+	'PWD': os.environ['PAYPAL_SPIKE_PWD'],
+	'SIGNATURE': os.environ['PAYPAL_SPIKE_SIG'],
 	'VERSION': '124.0'
 }
 
