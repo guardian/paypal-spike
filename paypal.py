@@ -12,7 +12,7 @@ REQUEST_DEFAULTS = {
 	'USER': '***REMOVED***',
 	'PWD': '***REMOVED***',
 	'SIGNATURE': '***REMOVED***',
-	'VERSION': '86.0'
+	'VERSION': '124.0'
 }
 
 
@@ -31,6 +31,9 @@ def setup_payment(return_url, cancel_url):
 
 	req_data = {
 		'METHOD': 'SetExpressCheckout',
+		'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
+		'PAYMENTREQUEST_0_AMT': '4.20',
+		'PAYMENTREQUEST_0_CURRENCYCODE': 'GBP',
 		'RETURNURL': return_url,
 		'CANCELURL': cancel_url,
 		'BILLINGTYPE': 'MerchantInitiatedBilling'

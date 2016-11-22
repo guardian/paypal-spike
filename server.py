@@ -1,7 +1,7 @@
 # ----- Imports ----- #
 
 from urllib.parse import urlencode
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, json, request
 import paypal
 
 
@@ -19,7 +19,8 @@ def checkout():
 
 	return render_template('checkout.html')
 
-@app.route('/paypal')
+
+@app.route('/paypal', methods=['POST'])
 def auth_payment():
 
 	token = paypal.setup_payment(
@@ -27,9 +28,10 @@ def auth_payment():
 		cancel_url='http://localhost:5000/cancel'
 	)
 
-	redirect_url = PAYPAL_URL.format(token)
+	# redirect_url = PAYPAL_URL.format(token)
 
-	return redirect(redirect_url)
+	return json.dumps({'token': token})
+
 
 @app.route('/create_payment')
 def create_payment():

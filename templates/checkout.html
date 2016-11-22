@@ -1,5 +1,34 @@
 {% extends "base.html" %}
 {% block title %}Paypal Demo - Checkout{% endblock title %}
 {% block content %}
-	<a href="/paypal">Pay With Paypal</a>
+	<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+	<div id="paypal-button"></div>
+	<script>
+		paypal.Button.render({
+		
+			env: 'sandbox', // Specify 'sandbox' for the test environment
+
+			payment: function (resolve, reject) {
+
+				var CREATE_PAYMENT_URL = '/paypal';
+
+				paypal.request.post(CREATE_PAYMENT_URL)
+					.then(function (data) {
+						resolve(data.token);
+					})
+					.catch(function (err) {
+						reject(err);
+					});
+
+			},
+
+			onAuthorize: function (data, actions) {
+
+				var CREATE_AGREEMENT_URL = '/create_payment';
+				alert('We are back!');
+
+		   }
+				
+		}, '#paypal-button');
+	</script>
 {% endblock content %}
