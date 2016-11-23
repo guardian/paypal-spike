@@ -1,45 +1,107 @@
 {% extends "base.html" %}
 {% block title %}Paypal Demo - Checkout{% endblock title %}
 {% block content %}
-	<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
-	<div id="paypal-button"></div>
-	<script>
-		paypal.Button.render({
-		
-			env: 'sandbox', // Specify 'sandbox' for the test environment
-
-			payment: function (resolve, reject) {
-
-				const CREATE_PAYMENT_URL = '/paypal';
-
-				paypal.request.post(CREATE_PAYMENT_URL)
-					.then(data => {
-						resolve(data.token);
-					})
-					.catch(err => {
-						reject(err);
-					});
-
-			},
-
-			onAuthorize: function (data, actions) {
-
-				const CREATE_AGREEMENT_URL = '/create_payment';
-
-				fetch(CREATE_AGREEMENT_URL, {
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-					body: JSON.stringify({ token: data.paymentToken })
-				}).then(response => {
-					return response.json();
-				}).then(baid_data => {
-					alert(`Your BAID: ${baid_data.baid}`);
-				}).catch(err => {
-					alert('Uh oh!');
-				});
-
-		   }
+	<style>
+		main {
+			width: 40%;
+			margin: 0 auto;
+			font-family: sans-serif;
+			background-color: #eee;
+			padding: 2em;
+		}
+		#buttons {
+			margin: 2em auto 0;
+			width: 30%;
+		}
+		input, label {
+			display: block;
+			margin-top: 1em;
+		}
+		input {
+			width: 96%;
+			border-radius: 20em;
+			border: 1px solid #2288aa;
+			padding: .5em 1em;
+		}
+		label {
+			color: #666;
+		}
+		button {
+			background-color: #2288aa;
+			border: none;
+			border-radius: 20em;
+			color: white;
+			padding: .5em 2em;
+		}
+		hr {
+			padding: 0;
+			border: none;
+			margin: 2em 0;
+			border-top: 1px solid #2288aa;
+			width: 100%;
+		}
+	</style>
+	<main>
+		<form action="POST">
+			<label for="first-name">First Name</label>
+			<input type="text" id="first-name" placeholder="First Name">
+			<label for="last-name">Last Name</label>
+			<input type="text" id="last-name" placeholder="Last Name">
+			<hr>
+			<label for="address-one">Address Line One</label>
+			<input type="text" id="address-one" placeholder="Address Line One">
+			<label for="address-two">Address Line Two</label>
+			<input type="text" id="address-two" placeholder="Address Line Two">
+			<label for="town">Town</label>
+			<input type="text" id="town" placeholder="Town">
+			<label for="country">Country</label>
+			<input type="text" id="country" placeholder="Country">
+			<label for="postcode">Postcode</label>
+			<input type="text" id="postcode" placeholder="Postcode">
+		</form>
+		<section id="buttons">
+			<button>Credit/Debit Card</button>
+			<script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+			<div id="paypal-button"></div>
+			<script>
+				paypal.Button.render({
 				
-		}, '#paypal-button');
-	</script>
+					env: 'sandbox', // Specify 'sandbox' for the test environment
+
+					payment: function (resolve, reject) {
+
+						const CREATE_PAYMENT_URL = '/paypal';
+
+						paypal.request.post(CREATE_PAYMENT_URL)
+							.then(data => {
+								resolve(data.token);
+							})
+							.catch(err => {
+								reject(err);
+							});
+
+					},
+
+					onAuthorize: function (data, actions) {
+
+						const CREATE_AGREEMENT_URL = '/create_payment';
+
+						fetch(CREATE_AGREEMENT_URL, {
+							headers: { 'Content-Type': 'application/json' },
+							method: 'POST',
+							body: JSON.stringify({ token: data.paymentToken })
+						}).then(response => {
+							return response.json();
+						}).then(baid_data => {
+							alert(`Your BAID: ${baid_data.baid}`);
+						}).catch(err => {
+							alert('Uh oh!');
+						});
+
+				   }
+						
+				}, '#paypal-button');
+			</script>
+		</section>
+	</main>
 {% endblock content %}
