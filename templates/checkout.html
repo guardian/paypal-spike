@@ -1,49 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Paypal Demo - Checkout{% endblock title %}
+{% block head %}
+	<link rel="stylesheet" href="/static/checkout.css">
+{% endblock head %}
 {% block content %}
-	<style>
-		main {
-			width: 40%;
-			margin: 0 auto;
-			font-family: sans-serif;
-			background-color: #eee;
-			padding: 1.5em 3em;
-		}
-		#buttons {
-			margin: 2em auto 0;
-			width: 30%;
-		}
-		input, label {
-			display: block;
-			margin-top: 1em;
-		}
-		input {
-			width: 96%;
-			border-radius: 20em;
-			border: 1px solid #bbb;
-			padding: .5em 1em;
-		}
-		label {
-			color: #666;
-		}
-		button {
-			background-color: #2288aa;
-			border: none;
-			border-radius: 20em;
-			color: white;
-			padding: .5em 2em;
-			margin: .5em .1em;
-			width: 95%;
-			cursor: pointer;
-		}
-		hr {
-			padding: 0;
-			border: none;
-			margin: 2em 0;
-			border-top: 1px solid #bbb;
-			width: 100%;
-		}
-	</style>
 	<main>
 		<form action="POST">
 			<label for="first-name">First Name</label>
